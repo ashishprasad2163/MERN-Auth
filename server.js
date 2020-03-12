@@ -1,7 +1,11 @@
 // common json format , import is used when using babel dependencies
 const express = require('express');
+const connectDB = require('./config/db');
 
 const app = express();
+
+//connect database
+connectDB();
 
 //way to send data or create an endpoint to get request
 //app.get('/', (req, res) => res.send('Hello World'));
