@@ -8,7 +8,7 @@ const config = require('config');
 const { check, validationResult } = require('express-validator'); //check the params if valid or not "from express-validator.io"
 const User = require('../models/User');
 
-//@route  POST api/users
+//@route  POST  api/users
 //@description  Register a user
 //@access  Public
 router.post(
