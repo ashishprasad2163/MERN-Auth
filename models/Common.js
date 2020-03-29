@@ -4,7 +4,11 @@ const CommonSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'users'
   },
-  name: {
+  profilePicture: {
+    type: String,
+    required: true
+  }
+  /*name: {
     type: String,
     required: true
   },
@@ -19,7 +23,7 @@ const CommonSchema = mongoose.Schema({
   date: {
     type: Date,
     default: Date.now
-  }
+  }*/
 });
 
 module.exports = mongoose.model('common', CommonSchema);

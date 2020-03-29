@@ -20,7 +20,18 @@ router.post(
     check('email', 'Please enter a valid email').isEmail(),
     check('password', 'Password must contain atleast six characters').isLength({
       min: 6
-    })
+    }),
+    check('phone', 'Enter a valid mobile number').isLength({ min: 10 }),
+    check('aadhar', 'Enter a valid aadhar number').isLength({ min: 12 }),
+    check('category', 'Category is required')
+      .not()
+      .isEmpty(),
+    check('orgName', 'orgName is required')
+      .not()
+      .isEmpty(),
+    check('address', 'Address is required')
+      .not()
+      .isEmpty()
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -30,7 +41,20 @@ router.post(
 
     //res.send(req.body); //req.body provides info like name,email,password and to use it , add a middleware in server.js
     //req.body has info we need,we will destructure it in next line.
-    const { name, email, password } = req.body;
+    const {
+      name,
+      email,
+      password,
+      aadhar,
+      phone,
+      phone2,
+      category,
+      orgName,
+      address,
+      accountName,
+      accountNumber,
+      ifsc
+    } = req.body;
 
     try {
       //check if user already present by email param
@@ -43,7 +67,16 @@ router.post(
       user = new User({
         name,
         email,
-        password
+        password,
+        aadhar,
+        phone,
+        phone2,
+        category,
+        orgName,
+        address,
+        accountName,
+        accountNumber,
+        ifsc
       });
 
       //before saving password in db ,encrypt it by bcrypt

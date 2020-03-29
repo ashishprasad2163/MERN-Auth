@@ -1,4 +1,5 @@
 // common json format , import is used when using babel dependencies
+const path = require('path');
 const express = require('express');
 const connectDB = require('./config/db');
 
@@ -20,7 +21,8 @@ app.get('/', (req, res) => res.json({ msg: 'Hii it worked!' }));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/common', require('./routes/common'));
+app.use(express.static(path.join(__dirname, './uploads')));
 
 //PORT is detected in production automatically or provide locally
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`SERVER STARTED ON ${PORT}`));

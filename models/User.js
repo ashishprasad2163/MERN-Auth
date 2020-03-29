@@ -16,6 +16,42 @@ const UserSchema = mongoose.Schema({
   date: {
     type: Date,
     default: Date.now
+  },
+  aadhar: {
+    type: Number,
+    required: true
+  },
+  phone: {
+    type: Number,
+    required: true
+  },
+  phone2: {
+    type: Number,
+    required: false
+  },
+  category: {
+    type: String,
+    required: true
+  },
+  orgName: {
+    type: String,
+    required: true
+  },
+  address: {
+    type: String,
+    required: true
+  },
+  accountName: {
+    type: String,
+    required: false
+  },
+  accountNumber: {
+    type: Number,
+    required: false
+  },
+  ifsc: {
+    type: String,
+    required: false
   }
 });
 
