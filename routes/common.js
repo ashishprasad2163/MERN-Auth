@@ -69,9 +69,9 @@ router.get('/', auth, async (req, res) => {
 router.get('/', auth, async (req, res) => {
   //pull from db by id and sorted by latest date
   try {
-    const common = await Common.findOne({ user: req.user.id }).sort({
-      date: -1
-    });
+    const common = await Common.findOne({ user: req.user.id }).sort([
+      ['profilePicture', -1]
+    ]);
     res.json(common.profilePicture);
   } catch (error) {
     console.error(error.message);
