@@ -52,6 +52,9 @@ const UserSchema = mongoose.Schema({
   ifsc: {
     type: String,
     required: false
+  },
+  affiliateId: {
+    type: Number
   }
 });
 

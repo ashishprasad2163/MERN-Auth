@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken');
 const config = require('config');
 const { check, validationResult } = require('express-validator'); //check the params if valid or not "from express-validator.io"
 const User = require('../models/User');
+const randomize = require('randomatic');
 
 //@route  POST  api/users
 //@description  Register a user
@@ -38,6 +39,10 @@ router.post(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
+
+    //generate unique id for user
+    let affiliateId = randomize('0', 6, { exclude: '0' });
+    console.log(affiliateId);
 
     //res.send(req.body); //req.body provides info like name,email,password and to use it , add a middleware in server.js
     //req.body has info we need,we will destructure it in next line.
@@ -76,7 +81,8 @@ router.post(
         address,
         accountName,
         accountNumber,
-        ifsc
+        ifsc,
+        affiliateId
       });
 
       //before saving password in db ,encrypt it by bcrypt
