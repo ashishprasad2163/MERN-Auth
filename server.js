@@ -21,6 +21,7 @@ app.get('/', (req, res) => res.json({ msg: 'Hii it worked!' }));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/common', require('./routes/common'));
+app.use('/api/jobs', require('./routes/jobs'));
 app.use(express.static(path.join(__dirname, './uploads')));
 
 //PORT is detected in production automatically or provide locally

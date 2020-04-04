@@ -1,4 +1,4 @@
-//contains crud
+//contains crud of user profile
 
 const express = require('express');
 const router = express.Router();

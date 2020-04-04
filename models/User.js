@@ -2,60 +2,60 @@ const mongoose = require('mongoose');
 const UserSchema = mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: true,
   },
   email: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
   },
   password: {
     type: String,
-    required: true
+    required: true,
   },
   date: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
   aadhar: {
     type: Number,
-    required: true
+    required: true,
   },
   phone: {
     type: Number,
-    required: true
+    required: true,
   },
   phone2: {
     type: Number,
-    required: false
+    required: false,
   },
   category: {
     type: String,
-    required: true
+    required: true,
   },
   orgName: {
     type: String,
-    required: true
+    required: true,
   },
   address: {
     type: String,
-    required: true
+    required: true,
   },
   accountName: {
     type: String,
-    required: false
+    required: false,
   },
   accountNumber: {
     type: Number,
-    required: false
+    required: false,
   },
   ifsc: {
     type: String,
-    required: false
+    required: false,
   },
   affiliateId: {
-    type: Number
-  }
+    type: String,
+  },
 });
 
 module.exports = mongoose.model('user', UserSchema);

@@ -9,30 +9,23 @@ const { check, validationResult } = require('express-validator'); //check the pa
 const User = require('../models/User');
 const randomize = require('randomatic');
 
+
 //@route  POST  api/users
 //@description  Register a user
 //@access  Public
 router.post(
   '/',
   [
-    check('name', 'Name is required')
-      .not()
-      .isEmpty(),
+    check('name', 'Name is required').not().isEmpty(),
     check('email', 'Please enter a valid email').isEmail(),
     check('password', 'Password must contain atleast six characters').isLength({
-      min: 6
+      min: 6,
     }),
     check('phone', 'Enter a valid mobile number').isLength({ min: 10 }),
     check('aadhar', 'Enter a valid aadhar number').isLength({ min: 12 }),
-    check('category', 'Category is required')
-      .not()
-      .isEmpty(),
-    check('orgName', 'orgName is required')
-      .not()
-      .isEmpty(),
-    check('address', 'Address is required')
-      .not()
-      .isEmpty()
+    check('category', 'Category is required').not().isEmpty(),
+    check('orgName', 'orgName is required').not().isEmpty(),
+    check('address', 'Address is required').not().isEmpty(),
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -41,7 +34,8 @@ router.post(
     }
 
     //generate unique id for user
-    let affiliateId = randomize('0', 6, { exclude: '0' });
+    let numberRandom = randomize('0', 5, { exclude: '0' });
+    var affiliateId = 'XAF ' + numberRandom;
     console.log(affiliateId);
 
     //res.send(req.body); //req.body provides info like name,email,password and to use it , add a middleware in server.js
@@ -58,7 +52,7 @@ router.post(
       address,
       accountName,
       accountNumber,
-      ifsc
+      ifsc,
     } = req.body;
 
     try {
@@ -82,7 +76,7 @@ router.post(
         accountName,
         accountNumber,
         ifsc,
-        affiliateId
+        affiliateId,
       });
 
       //before saving password in db ,encrypt it by bcrypt
@@ -97,8 +91,8 @@ router.post(
       //create payload/object to be sent in token
       const payload = {
         user: {
-          id: user.id
-        }
+          id: user.id,
+        },
       };
 
       //to generate a token ,sign it first
@@ -106,7 +100,7 @@ router.post(
         payload,
         config.get('jwtSecret'),
         {
-          expiresIn: 360000
+          expiresIn: 360000,
         },
         (error, token) => {
           if (error) throw error;
