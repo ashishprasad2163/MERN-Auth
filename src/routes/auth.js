@@ -1,13 +1,15 @@
 //contains login route
 
-const express = require('express');
+import express from 'express';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import config from 'config';
+import { auth } from '../middleware/auth';
+import { check, validationResult } from 'express-validator'; //check the params if valid or not "from express-validator.io"
+import User from '../models/User';
+import { issueToken } from './functions/Auth';
+
 const router = express.Router();
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const config = require('config');
-const auth = require('../middleware/auth');
-const { check, validationResult } = require('express-validator'); //check the params if valid or not "from express-validator.io"
-const User = require('../models/User');
 
 //@route  GET api/auth
 //@description  get logged in user
@@ -30,7 +32,7 @@ router.post(
   '/',
   [
     check('email', 'Please include a valid email').isEmail(),
-    check('password', 'Please enter password').exists()
+    check('password', 'Please enter password').exists(),
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -56,23 +58,14 @@ router.post(
       //if password match
       //create payload/object to be sent in token
       const payload = {
-        user: {
-          id: user.id
-        }
+        username: user.username,
+        email: user.email,
+        id: user.id,
       };
 
       //to generate a token ,sign it first
-      jwt.sign(
-        payload,
-        config.get('jwtSecret'),
-        {
-          expiresIn: 360000
-        },
-        (error, token) => {
-          if (error) throw error;
-          res.json({ token });
-        }
-      );
+      let token = await issueToken(payload);
+      return res.status(201).json({ token });
     } catch (error) {
       console.error(error.message);
       res.status(500).send('Server error');
@@ -82,4 +75,4 @@ router.post(
 
 //export router
 
-module.exports = router;
+export default router;

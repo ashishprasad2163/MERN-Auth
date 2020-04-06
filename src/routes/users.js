@@ -1,15 +1,15 @@
 //contains register route
 
-const express = require('express');
+import express from 'express';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import config from 'config';
+import { check, validationResult } from 'express-validator'; //check the params if valid or not "from express-validator.io"
+import User from '../models/User';
+import randomize from 'randomatic';
+import { issueToken } from './functions/Auth';
+
 const router = express.Router();
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const config = require('config');
-const { check, validationResult } = require('express-validator'); //check the params if valid or not "from express-validator.io"
-const User = require('../models/User');
-const randomize = require('randomatic');
-
-
 //@route  POST  api/users
 //@description  Register a user
 //@access  Public
@@ -40,22 +40,9 @@ router.post(
 
     //res.send(req.body); //req.body provides info like name,email,password and to use it , add a middleware in server.js
     //req.body has info we need,we will destructure it in next line.
-    const {
-      name,
-      email,
-      password,
-      aadhar,
-      phone,
-      phone2,
-      category,
-      orgName,
-      address,
-      accountName,
-      accountNumber,
-      ifsc,
-    } = req.body;
 
     try {
+      const { email } = req.body;
       //check if user already present by email param
       let user = await User.findOne({ email });
       if (user) {
@@ -63,57 +50,25 @@ router.post(
       }
 
       //if not exist , add new user in User model
-      user = new User({
-        name,
-        email,
-        password,
-        aadhar,
-        phone,
-        phone2,
-        category,
-        orgName,
-        address,
-        accountName,
-        accountNumber,
-        ifsc,
-        affiliateId,
-      });
-
-      //before saving password in db ,encrypt it by bcrypt
-      const salt = await bcrypt.genSalt(10);
-
-      //hash the password
-      user.password = await bcrypt.hash(password, salt);
-
-      //now save in db
-      await user.save();
+      const newUser = await User.create(req.body);
 
       //create payload/object to be sent in token
       const payload = {
-        user: {
-          id: user.id,
-        },
+        username: newUser.username,
+        email: newUser.email,
+        id: newUser.id,
       };
 
       //to generate a token ,sign it first
-      jwt.sign(
-        payload,
-        config.get('jwtSecret'),
-        {
-          expiresIn: 360000,
-        },
-        (error, token) => {
-          if (error) throw error;
-          res.json({ token });
-        }
-      );
+      let token = await issueToken(payload);
+      return res.status(201).json({ token });
     } catch (error) {
-      console.error(error.message);
-      res.status(500).send('server error');
+      console.error(error);
+      return res.status(500).send('server error');
     }
   }
 );
 
 //export router
 
-module.exports = router;
+export default router;

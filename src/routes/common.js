@@ -1,14 +1,15 @@
 //contains crud of user profile
 
-const express = require('express');
-const router = express.Router();
-const auth = require('../middleware/auth'); //needed when using protected routes
-const { check, validationResult } = require('express-validator'); //check the params if valid or not "from express-validator.io"
-const User = require('../models/User');
-const Common = require('../models/Common');
-const multer = require('multer');
+import express from 'express';
+import auth from '../middleware/auth'; //needed when using protected routes
+import { check, validationResult } from 'express-validator'; //check the params if valid or not "from express-validator.io"
+import User from '../models/User';
+import Common from '../models/Common';
+import multer from 'multer';
 
-const { handleFilePath } = require('./function');
+// import { handleFilePath } from './function';
+
+const router = express.Router();
 
 const storage = multer.diskStorage({
   destination: (req, file, done) => done(null, './uploads'),
@@ -23,7 +24,7 @@ const storage = multer.diskStorage({
         new Date().toISOString().replace(/:|\./g, '') +
         extension
     );
-  }
+  },
 });
 
 const fileFilter = (req, file, cb) => {
@@ -41,9 +42,9 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({
   storage: storage,
   limits: {
-    fileSize: 1024 * 1024 * 50
+    fileSize: 1024 * 1024 * 50,
   },
-  fileFilter: fileFilter
+  fileFilter: fileFilter,
 });
 
 /*
@@ -70,7 +71,7 @@ router.get('/', auth, async (req, res) => {
   //pull from db by id and sorted by latest date
   try {
     const common = await Common.findOne({ user: req.user.id }).sort([
-      ['profilePicture', -1]
+      ['profilePicture', -1],
     ]);
     res.json(common.profilePicture);
   } catch (error) {
@@ -135,7 +136,7 @@ router.post('/', [auth, upload.single('profilePicture')], async (req, res) => {
 
   console.log(req.file.filename);
 
-  const staticPath = await handleFilePath(req.file.filename);
+  //const staticPath = await handleFilePath(req.file.filename);
 
   //pull data from body
   //const { name, phone, aadhar } = req.body;
@@ -147,7 +148,7 @@ router.post('/', [auth, upload.single('profilePicture')], async (req, res) => {
       // phone,
       // aadhar,
       user: req.user.id,
-      profilePicture: req.file.filename
+      profilePicture: req.file.filename,
     });
 
     const common = await newDetail.save();
@@ -174,4 +175,4 @@ router.delete('/:id', (req, res) => {
 
 //export router
 
-module.exports = router;
+export default router;

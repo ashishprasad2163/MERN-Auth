@@ -1,6 +1,0 @@
-{
-  "mongoURI": "mongodb+srv://ashish123:ashish123@cluster0-fzcwc.mongodb.net/xperttutor?retryWrites=true&w=majority",
-  "jwtSecret":"secret",
-  "devBaseURL": "http://localhost:3000/",
-  "prodBaseURL": ""
-}

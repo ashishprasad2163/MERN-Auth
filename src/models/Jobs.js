@@ -1,7 +1,9 @@
-const mongoose = require('mongoose');
-const JobsSchema = mongoose.Schema({
+import { Schema, model } from 'mongoose';
+import paginator from 'mongoose-paginate-v2';
+
+const JobsSchema = Schema({
   user: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'users',
   },
   name: {
@@ -33,4 +35,5 @@ const JobsSchema = mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model('jobs', JobsSchema);
+JobsSchema.plugin(paginator);
+export default model('jobs', JobsSchema);
